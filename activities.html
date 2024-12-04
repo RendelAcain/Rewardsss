@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Activities - PLMun Engagement System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="plmun_logo.png" alt="PLMun Logo">
+        </div>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+
+    <!-- Activities Section -->
+    <section id="activities" class="activities-section">
+        <div class="container">
+            <h2>Course Activities</h2>
+            <p>Here are the activities for the selected course:</p>
+
+            <!-- Display Course and Activities Based on Selection -->
+            <div id="course-activities">
+                <!-- Placeholder content, will be dynamically updated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Pamantasan ng Lungsod ng Muntinlupa. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript to handle dynamic content -->
+    <script>
+        // Get the course parameter from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const course = urlParams.get('course');
+
+        // Display the activities based on the selected course
+        const courseActivities = {
+            bsit: ["Web Development Workshop", "Coding Bootcamp", "Hackathon"],
+            crim: ["Criminal Law Seminar", "Mock Trial", "Crime Scene Investigation"],
+            bsbm: ["Business Management Lecture", "Entrepreneurship Forum", "Marketing Strategy Workshop"],
+            engg: ["Engineering Design Competition", "Robotics Workshop", "Science Fair"]
+        };
+
+        const activityContainer = document.getElementById("course-activities");
+
+        // Check if the course is valid and display its activities
+        if (course && courseActivities[course]) {
+            const activities = courseActivities[course];
+            activityContainer.innerHTML = `<h3>Activities for ${course.toUpperCase()}:</h3><ul>`;
+            activities.forEach(activity => {
+                activityContainer.innerHTML += `<li>${activity}</li>`;
+            });
+            activityContainer.innerHTML += `</ul>`;
+        } else {
+            activityContainer.innerHTML = `<p>No activities available for this course.</p>`;
+        }
+    </script>
+</body>
+</html>

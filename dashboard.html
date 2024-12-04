@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PLMun Engagement System</title>
+    <style>
+   /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .navbar {
+                background-color: #212529;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar .logo h1 {
+            color: white;
+            font-size: 24px;
+            margin-top: 5px; /* Adjust as needed */
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
+
+
+    /* Dashboard Section Styles */
+    .dashboard {
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .points-rewards, .course-selection, .events-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .points-rewards h3, .course-selection h3, .events-section h3 {
+        margin-top: 0;
+    }
+
+    .btn-secondary, .btn-primary {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #3b9e3b; /* Green theme for buttons */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover, .btn-primary:hover {
+        background-color: #2a7b2e; /* Darker green for hover */
+    }
+
+    /* Footer Styles */
+    footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+
+    /* Events Section */
+    .events .event {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    .success-message {
+        display: none;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="plmun.png" alt="PLMun Logo"> <h1>PLMUN</h1>
+        </div>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="logout.php">Logout</a></li>
+	    <li><a href="profile_customization.html">Edit Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard">
+        <div class="container">
+            <h2>Welcome, Student!</h2>
+
+            <!-- Points and Rewards Section -->
+            <div class="points-rewards">
+                <h3>Your Points: <span id="points">200</span></h3>
+                <p>You can redeem certificates as rewards. Accumulate points by participating in events, workshops, and activities.</p>
+                <a href="redeem_rewards.html" class="btn-secondary">Redeem Rewards</a>
+            </div>
+
+            <!-- Course Selection -->
+            <div class="course-selection">
+                <h3>Select Your Course</h3>
+                <form id="course-form">
+                    <select id="course" name="course" onchange="loadEvents()">
+                        <option value="CRIM">CRIM</option>
+                        <option value="BSBA">BSBA</option>
+                        <option value="BSBM">BSBM</option>
+                        <option value="BSIT">BSIT</option>
+                    	<option value="BSCS">BSCS</option>
+			
+			</select>
+                </form>
+            </div>
+
+            <!-- Suggested Events -->
+            <div class="events-section">
+                <h3>Suggested Events Based on Your Course</h3>
+                <div id="events-container" class="events">
+                    <p>Please select a course to view related events.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Pamantasan ng Lungsod ng Muntinlupa. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript to dynamically load events and handle "Join Event" -->
+    <script>
+        let userPoints = 200; // Initial points
+
+function loadEvents() {
+    const category = document.getElementById("course").value; // Use "course" dropdown as "category"
+    const eventsContainer = document.getElementById("events-container");
+    eventsContainer.innerHTML = "<p>Loading events...</p>";
+
+    fetch(`load_events.php?category=${category}`)
+        .then(response => response.json())
+        .then(events => {
+            eventsContainer.innerHTML = "";
+            if (events.length > 0) {
+                events.forEach(event => {
+                    const eventElement = document.createElement("div");
+                    eventElement.classList.add("event");
+                    eventElement.innerHTML = `
+                        <h4>${event.name}</h4>
+                        <p>${event.description}</p>
+                        <button class="btn-primary" onclick="joinEvent(${event.id}, ${event.points})">Join Event</button>
+                        <div class="success-message" id="success-${event.id}">
+                            You have successfully joined the event! Wait for further announcements.
+                        </div>
+                    `;
+                    eventsContainer.appendChild(eventElement);
+                });
+            } else {
+                eventsContainer.innerHTML = "<p>No events available for this category.</p>";
+            }
+        })
+        .catch(err => {
+            console.error("Error loading events:", err);
+            eventsContainer.innerHTML = "<p>Error loading events. Please try again later.</p>";
+        });
+}
+        function loadEvents() {
+            const course = document.getElementById("course").value;
+            const eventsContainer = document.getElementById("events-container");
+            eventsContainer.innerHTML = "";
+            if (courseEvents[course]) {
+                courseEvents[course].forEach(event => {
+                    const eventElement = document.createElement("div");
+                    eventElement.classList.add("event");
+                    eventElement.innerHTML = `
+                        <h4>${event.name}</h4>
+                        <p>${event.description}</p>
+                        <button class="btn-primary" onclick="joinEvent('${event.name}', ${event.points})">Join Event</button>
+                        <div class="success-message" id="success-${event.name}">
+                            You have successfully joined the event! Wait for further announcements.
+                        </div>
+                    `;
+                    eventsContainer.appendChild(eventElement);
+                });
+            }
+        }
+
+        function joinEvent(eventName, pointsEarned) {
+            // Show success message
+            const successMessage = document.getElementById(`success-${eventName}`);
+            successMessage.style.display = 'block';
+
+            // Add points to userPoints
+            userPoints += pointsEarned;
+
+            // Update the points displayed on the dashboard
+            document.getElementById("points").innerText = userPoints;
+
+            // Optionally: Disable the Join Event button to prevent multiple submissions
+            const eventButtons = document.querySelectorAll('.btn-primary');
+            eventButtons.forEach(button => button.disabled = true);
+        }
+
+        loadEvents();
+    </script>
+</body>
+</html>

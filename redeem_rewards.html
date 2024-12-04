@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redeem Rewards - PLMun Engagement System</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #212529;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+	 .navbar .logo h1 {
+            color: white;
+            font-size: 24px;
+            margin-top: 5px; /* Adjust as needed */
+        }
+
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .navbar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .redeem-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .reward-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn-redeem {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #3b9e3b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-redeem:hover {
+            background-color: #2a7b2e;
+        }
+
+        .btn-redeem.redeeming {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #2a7b2e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+	footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+
+        /* Success Message Animation */
+        .success-message {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="plmun.png" alt="PLMun Logo"> <h1>PLMUN Admin</h1>
+        </div>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Redeem Rewards Section -->
+    <div class="redeem-container">
+        <h2>Redeem Rewards</h2>
+
+        <div class="reward-item">
+            <h3>Certificate of Attendance</h3>
+            <p>Earn a certificate for attending events, workshops, and activities.</p>
+            <button class="btn-redeem" onclick="redeem('Certificate of Attendance', this)">Redeem</button>
+        </div>
+
+        <div class="reward-item">
+            <h3>Certificate of Completion</h3>
+            <p>Earn a certificate upon completion of a course or workshop.</p>
+            <button class="btn-redeem" onclick="redeem('Certificate of Completion', this)">Redeem</button>
+        </div>
+
+        <div class="reward-item">
+            <h3>Certificate of Excellence</h3>
+            <p>Earn a certificate for outstanding performance or participation.</p>
+            <button class="btn-redeem" onclick="redeem('Certificate of Excellence', this)">Redeem</button>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message">
+            <!-- Content will be dynamically added by JavaScript -->
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function redeem(reward, button) {
+            // Disable the button and show loading spinner
+            button.classList.add('redeeming');
+            button.textContent = 'Redeeming...';
+            const spinner = document.createElement('div');
+            spinner.classList.add('spinner');
+            button.appendChild(spinner);
+
+            // Simulate async action with a timeout
+            setTimeout(() => {
+                // Remove spinner and update button
+                button.classList.remove('redeeming');
+                button.textContent = 'Redeemed';
+                button.disabled = true;
+
+                // Show success message
+                const successMessage = document.getElementById('success-message');
+                successMessage.style.display = 'block';
+                successMessage.textContent = `You have successfully redeemed: ${reward}. The certificate will be issued soon.`;
+
+                // Log action
+                console.log('Redeemed:', reward);
+            }, 2000); // Simulate a 2-second delay
+        }
+
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Pamantasan ng Lungsod ng Muntinlupa. All rights reserved.</p>
+    </footer>
+</body>
+</html>
